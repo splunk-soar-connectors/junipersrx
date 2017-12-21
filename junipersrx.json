@@ -1,444 +1,459 @@
 {
-    "appid"     : "fd9f7e78-9911-4cd0-8474-a8e3dd7cf6df",
-    "name"    : "Juniper SRX",
-    "description" : "This app implements various containment actions like 'block ip' and 'block application' in addition to investigative actions like 'list applications' on a Juniper SRX device.  Uses port 830 by default if no port is set.",
+    "appid": "fd9f7e78-9911-4cd0-8474-a8e3dd7cf6df",
+    "name": "Juniper SRX",
+    "description": "This app implements various containment actions like 'block ip' and 'block application' in addition to investigative actions like 'list applications' on a Juniper SRX device.  Uses port 830 by default if no port is set.",
     "type": "firewall",
     "publisher": "Phantom",
     "package_name": "phantom_junipersrx",
-    "main_module" : "junipersrx_connector.pyc",
+    "main_module": "junipersrx_connector.pyc",
     "app_version": "1.2.15",
     "utctime_updated": "2017-07-18T02:43:55.000000Z",
     "product_vendor": "Juniper Networks",
     "product_name": "Juniper SRX",
     "product_version_regex": ".*",
     "min_phantom_version": "2.1.478",
-    "logo": "juniper.png",
+    "logo": "logo_junipernetworks.svg",
+    "logo_dark": "logo_junipernetworks_dark.svg",
     "license": "Copyright (c) Phantom Cyber Corporation 2015-2017",
     "pip_dependencies": {
-      "wheel": [
-        {
-          "module": "ncclient",
-          "input_file": "wheels_ncclient/ncclient-0.5.3-py2-none-any.whl"
-        },
-        {
-          "module": "jsonpath_rw",
-          "input_file": "wheels_jsonpath_rw/jsonpath_rw-1.4.0-py2-none-any.whl"
-        }
-      ]
+        "wheel": [
+            {
+                "module": "ncclient",
+                "input_file": "wheels_ncclient/ncclient-0.5.3-py2-none-any.whl"
+            },
+            {
+                "module": "jsonpath_rw",
+                "input_file": "wheels_jsonpath_rw/jsonpath_rw-1.4.0-py2-none-any.whl"
+            }
+        ]
     },
     "configuration": {
-      "device": {
-        "data_type": "string",
-        "order": 0,
-        "description": "Device IP/Hostname",
-        "required": true
-      },
-      "port": {
-        "data_type": "string",
-        "order": 1,
-        "description": "Device Port",
-        "required": false,
-        "default": "830"
-      },
-      "username": {
-        "data_type": "string",
-        "order": 3,
-        "description": "Username",
-        "required": true
-      },
-      "password": {
-        "data_type": "password",
-        "order": 4,
-        "description": "Password",
-        "required": true
-      }
+        "device": {
+            "data_type": "string",
+            "order": 0,
+            "description": "Device IP/Hostname",
+            "required": true
+        },
+        "port": {
+            "data_type": "string",
+            "order": 1,
+            "description": "Device Port",
+            "required": false,
+            "default": "830"
+        },
+        "username": {
+            "data_type": "string",
+            "order": 3,
+            "description": "Username",
+            "required": true
+        },
+        "password": {
+            "data_type": "password",
+            "order": 4,
+            "description": "Password",
+            "required": true
+        }
     },
     "actions": [
-      {
-        "action": "test connectivity",
-        "description": "Validate the asset configuration for connectivity. This action tries to login to the device to check the connection and credentials.",
-        "type": "test",
-        "identifier": "test_asset_connectivity",
-        "read_only": true,
-        "parameters": {
+        {
+            "action": "test connectivity",
+            "description": "Validate the asset configuration for connectivity. This action tries to login to the device to check the connection and credentials.",
+            "type": "test",
+            "identifier": "test_asset_connectivity",
+            "read_only": true,
+            "parameters": {},
+            "output": [],
+            "versions": "EQ(*)"
         },
-        "output": [],
-        "versions":"EQ(*)"
-      },
-      {
-        "action": "block ip",
-        "description": "Block an IP",
-        "verbose": "This action creates address book and address set entries on the SRX device with the specified IP address. This address book is attached to the required zones and used in the 'phantom-block-address-policy'. A 'reject' action is configured for the security policy. The last step is to move the security policy to the top of the list. The container id of the phantom action is added in the description field to the address entry when it's created.",
-        "type": "contain",
-        "identifier": "block_ip",
-        "undo":"unblock ip",
-        "read_only": false,
-        "parameters": {
-          "ip": {
-            "description": "IP to block",
-            "data_type": "string",
-            "order": 0,
-            "contains": [ "ip" ],
-            "primary": true,
-            "required": true
-          },
-          "ph": {
-            "data_type": "ph",
-            "order": 1
-          },
-          "from_zone": {
-            "description": "Source zone",
-            "data_type": "string",
-            "order": 2,
-            "required": true,
-            "default": "trust"
-          },
-          "to_zone": {
-            "description": "Destination zone",
-            "data_type": "string",
-            "order": 3,
-            "required": true,
-            "default": "untrust"
-          }
+        {
+            "action": "block ip",
+            "description": "Block an IP",
+            "verbose": "This action creates address book and address set entries on the SRX device with the specified IP address. This address book is attached to the required zones and used in the 'phantom-block-address-policy'. A 'reject' action is configured for the security policy. The last step is to move the security policy to the top of the list. The container id of the phantom action is added in the description field to the address entry when it's created.",
+            "type": "contain",
+            "identifier": "block_ip",
+            "undo": "unblock ip",
+            "read_only": false,
+            "parameters": {
+                "ip": {
+                    "description": "IP to block",
+                    "data_type": "string",
+                    "order": 0,
+                    "contains": [
+                        "ip"
+                    ],
+                    "primary": true,
+                    "required": true
+                },
+                "ph": {
+                    "data_type": "ph",
+                    "order": 1
+                },
+                "from_zone": {
+                    "description": "Source zone",
+                    "data_type": "string",
+                    "order": 2,
+                    "required": true,
+                    "default": "trust"
+                },
+                "to_zone": {
+                    "description": "Destination zone",
+                    "data_type": "string",
+                    "order": 3,
+                    "required": true,
+                    "default": "untrust"
+                }
+            },
+            "render": {
+                "width": 12,
+                "title": "Block Ip",
+                "type": "table",
+                "height": 5
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.from_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.ip",
+                    "data_type": "string",
+                    "column_name": "IP",
+                    "column_order": 0,
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.to_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Message",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "render": {
-          "width": 12,
-          "title": "Block Ip",
-          "type": "table",
-          "height": 5
+        {
+            "action": "unblock ip",
+            "description": "Unblock an IP.",
+            "type": "correct",
+            "identifier": "unblock_ip",
+            "undo": "block ip",
+            "read_only": false,
+            "parameters": {
+                "ip": {
+                    "description": "IP to block",
+                    "data_type": "string",
+                    "order": 0,
+                    "contains": [
+                        "ip"
+                    ],
+                    "primary": true,
+                    "required": true
+                },
+                "ph": {
+                    "data_type": "ph",
+                    "order": 1
+                },
+                "from_zone": {
+                    "description": "Source zone",
+                    "data_type": "string",
+                    "order": 2,
+                    "required": true,
+                    "default": "trust"
+                },
+                "to_zone": {
+                    "description": "Destination zone",
+                    "data_type": "string",
+                    "order": 3,
+                    "required": true,
+                    "default": "untrust"
+                }
+            },
+            "render": {
+                "width": 12,
+                "title": "Unblock Ip",
+                "type": "table",
+                "height": 5
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.from_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.ip",
+                    "data_type": "string",
+                    "column_name": "IP",
+                    "column_order": 0,
+                    "contains": [
+                        "ip"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.to_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Message",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "output": [
-          {
-            "data_path": "action_result.parameter.ip",
-            "data_type": "string",
-            "column_name": "IP",
-            "column_order": 0,
-            "contains": [ "ip" ]
-          },
-          {
-            "data_path": "action_result.parameter.to_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.parameter.from_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.status",
-            "data_type": "string",
-            "column_name": "Status",
-            "column_order": 1
-          },
-          {
-            "data_path": "action_result.message",
-            "data_type": "string",
-            "column_name": "Message",
-            "column_order": 2
-          },
-
-          {
-            "data_path": "summary.total_objects",
-            "data_type": "numeric"
-          },
-          {
-            "data_path": "summary.total_objects_successful",
-            "data_type": "numeric"
-          }
-        ],
-        "versions":"EQ(*)"
-      },
-      {
-        "action": "unblock ip",
-        "description": "Unblock an IP.",
-        "type": "correct",
-        "identifier": "unblock_ip",
-        "undo": "block ip",
-        "read_only": false,
-        "parameters": {
-          "ip": {
-            "description": "IP to block",
-            "data_type": "string",
-            "order": 0,
-            "contains": [ "ip" ],
-            "primary": true,
-            "required": true
-          },
-          "ph": {
-            "data_type": "ph",
-            "order": 1
-          },
-          "from_zone": {
-            "description": "Source zone",
-            "data_type": "string",
-            "order": 2,
-            "required": true,
-            "default": "trust"
-          },
-          "to_zone": {
-            "description": "Destination zone",
-            "data_type": "string",
-            "order": 3,
-            "required": true,
-            "default": "untrust"
-          }
+        {
+            "action": "block application",
+            "description": "Block an application",
+            "verbose": "This action adds the specified application to a Phantom created application set. The created application set is configured as the 'application' to the 'phantom-block-app-policy'. A 'reject' action is configured for the security policy. The last step is to move the security policy to the top of the list.",
+            "type": "contain",
+            "identifier": "block_application",
+            "read_only": false,
+            "undo": "unblock application",
+            "parameters": {
+                "application": {
+                    "description": "Application to block",
+                    "data_type": "string",
+                    "order": 0,
+                    "contains": [
+                        "network application"
+                    ],
+                    "primary": true,
+                    "required": true
+                },
+                "ph": {
+                    "data_type": "ph",
+                    "order": 1
+                },
+                "from_zone": {
+                    "description": "Source zone",
+                    "data_type": "string",
+                    "order": 2,
+                    "required": true,
+                    "default": "trust"
+                },
+                "to_zone": {
+                    "description": "Destination zone",
+                    "data_type": "string",
+                    "order": 3,
+                    "required": true,
+                    "default": "untrust"
+                }
+            },
+            "render": {
+                "type": "table",
+                "width": 12,
+                "height": 5,
+                "title": "Block Application"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.application",
+                    "data_type": "string",
+                    "column_name": "Application",
+                    "column_order": 0,
+                    "contains": [
+                        "network application"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.from_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.to_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Message",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "render": {
-            "width": 12,
-            "title": "Unblock Ip",
-            "type": "table",
-            "height": 5
-          },
-        "output": [
-          {
-            "data_path": "action_result.parameter.ip",
-            "data_type": "string",
-            "column_name": "IP",
-            "column_order": 0,
-            "contains": [ "ip" ]
-          },
-          {
-            "data_path": "action_result.parameter.to_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.parameter.from_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.status",
-            "data_type": "string",
-            "column_name": "Status",
-            "column_order": 1
-          },
-          {
-            "data_path": "action_result.message",
-            "data_type": "string",
-            "column_name": "Message",
-            "column_order": 2
-          },
-
-          {
-            "data_path": "summary.total_objects",
-            "data_type": "numeric"
-          },
-          {
-            "data_path": "summary.total_objects_successful",
-            "data_type": "numeric"
-          }
-        ],
-        "versions":"EQ(*)"
-      },
-      {
-        "action": "block application",
-        "description": "Block an application",
-        "verbose": "This action adds the specified application to a Phantom created application set. The created application set is configured as the 'application' to the 'phantom-block-app-policy'. A 'reject' action is configured for the security policy. The last step is to move the security policy to the top of the list.",
-        "type": "contain",
-        "identifier": "block_application",
-        "read_only": false,
-        "undo":"unblock application",
-        "parameters": {
-          "application": {
-            "description": "Application to block",
-            "data_type": "string",
-            "order": 0,
-            "contains": [ "network application" ],
-            "primary": true,
-            "required": true
-          },
-          "ph": {
-            "data_type": "ph",
-            "order": 1
-          },
-          "from_zone": {
-            "description": "Source zone",
-            "data_type": "string",
-            "order": 2,
-            "required": true,
-            "default": "trust"
-          },
-          "to_zone": {
-            "description": "Destination zone",
-            "data_type": "string",
-            "order": 3,
-            "required": true,
-            "default": "untrust"
-          }
+        {
+            "action": "unblock application",
+            "description": "Unblock an application",
+            "type": "correct",
+            "identifier": "unblock_application",
+            "read_only": false,
+            "undo": "block application",
+            "parameters": {
+                "application": {
+                    "description": "Application to unblock",
+                    "data_type": "string",
+                    "order": 0,
+                    "contains": [
+                        "network application"
+                    ],
+                    "primary": true,
+                    "required": true
+                },
+                "ph": {
+                    "data_type": "ph",
+                    "order": 1
+                },
+                "from_zone": {
+                    "description": "Source zone",
+                    "data_type": "string",
+                    "order": 2,
+                    "required": true,
+                    "default": "trust"
+                },
+                "to_zone": {
+                    "description": "Destination zone",
+                    "data_type": "string",
+                    "order": 3,
+                    "required": true,
+                    "default": "untrust"
+                }
+            },
+            "render": {
+                "type": "table",
+                "width": 12,
+                "height": 5,
+                "title": "Unblock Application"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string",
+                    "column_name": "Status",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.parameter.application",
+                    "data_type": "string",
+                    "column_name": "Application",
+                    "column_order": 0,
+                    "contains": [
+                        "network application"
+                    ]
+                },
+                {
+                    "data_path": "action_result.parameter.from_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.parameter.to_zone",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string",
+                    "column_name": "Message",
+                    "column_order": 2
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)"
         },
-        "render": {
-          "type": "table",
-          "width": 12,
-          "height": 5,
-          "title": "Block Application"
-        },
-        "output": [
-          {
-            "data_path": "action_result.parameter.application",
-            "data_type": "string",
-            "column_name": "Application",
-            "column_order": 0,
-            "contains": [ "network application" ]
-          },
-          {
-            "data_path": "action_result.parameter.to_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.parameter.from_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.status",
-            "data_type": "string",
-            "column_name": "Status",
-            "column_order": 1
-          },
-          {
-            "data_path": "action_result.message",
-            "data_type": "string",
-            "column_name": "Message",
-            "column_order": 2
-          },
-          {
-            "data_path": "summary.total_objects",
-            "data_type": "numeric"
-          },
-          {
-            "data_path": "summary.total_objects_successful",
-            "data_type": "numeric"
-          }
-        ],
-        "versions":"EQ(*)"
-      },
-      {
-        "action": "unblock application",
-        "description": "Unblock an application",
-        "type": "correct",
-        "identifier": "unblock_application",
-        "read_only": false,
-        "undo":"block application",
-        "parameters": {
-          "application": {
-            "description": "Application to unblock",
-            "data_type": "string",
-            "order": 0,
-            "contains": [ "network application" ],
-            "primary": true,
-            "required": true
-          },
-          "ph": {
-            "data_type": "ph",
-            "order": 1
-          },
-          "from_zone": {
-            "description": "Source zone",
-            "data_type": "string",
-            "order": 2,
-            "required": true,
-            "default": "trust"
-          },
-          "to_zone": {
-            "description": "Destination zone",
-            "data_type": "string",
-            "order": 3,
-            "required": true,
-            "default": "untrust"
-          }
-        },
-        "render": {
-          "type": "table",
-          "width": 12,
-          "height": 5,
-          "title": "Unblock Application"
-        },
-        "output": [
-          {
-            "data_path": "action_result.parameter.application",
-            "data_type": "string",
-            "column_name": "Application",
-            "column_order": 0,
-            "contains": [ "network application" ]
-          },
-          {
-            "data_path": "action_result.parameter.to_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.parameter.from_zone",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.status",
-            "data_type": "string",
-            "column_name": "Status",
-            "column_order": 1
-          },
-          {
-            "data_path": "action_result.message",
-            "data_type": "string",
-            "column_name": "Message",
-            "column_order": 2
-          },
-          {
-            "data_path": "summary.total_objects",
-            "data_type": "numeric"
-          },
-          {
-            "data_path": "summary.total_objects_successful",
-            "data_type": "numeric"
-          }
-        ],
-        "versions":"EQ(*)"
-      },
-      {
-        "action": "list applications",
-        "description": "List the application that the device knows about and can block",
-        "type": "investigate",
-        "identifier": "list_apps",
-        "read_only": true,
-        "parameters": {
-        },
-        "render": {
-          "type": "table",
-          "width": 12,
-          "height": 5,
-          "title": "Application List"
-        },
-        "output": [
-          {
-            "data_path": "action_result.status",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.data.*.name",
-            "data_type": "string",
-            "column_name": "Application",
-            "column_order": 0,
-            "contains": [ "network application" ]
-          },
-          {
-            "data_path": "action_result.data.*.type",
-            "data_type": "string",
-            "column_name": "Type",
-            "column_order": 1
-          },
-          {
-            "data_path": "action_result.message",
-            "data_type": "string"
-          },
-          {
-            "data_path": "action_result.summary.total_applications",
-            "data_type": "numeric"
-          },
-          {
-            "data_path": "summary.total_objects",
-            "data_type": "numeric"
-          },
-          {
-            "data_path": "summary.total_objects_successful",
-            "data_type": "numeric"
-          }
-        ],
-        "versions":"EQ(*)"
-      }
+        {
+            "action": "list applications",
+            "description": "List the application that the device knows about and can block",
+            "type": "investigate",
+            "identifier": "list_apps",
+            "read_only": true,
+            "parameters": {},
+            "render": {
+                "type": "table",
+                "width": 12,
+                "height": 5,
+                "title": "Application List"
+            },
+            "output": [
+                {
+                    "data_path": "action_result.status",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.name",
+                    "data_type": "string",
+                    "column_name": "Application",
+                    "column_order": 0,
+                    "contains": [
+                        "network application"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.type",
+                    "data_type": "string",
+                    "column_name": "Type",
+                    "column_order": 1
+                },
+                {
+                    "data_path": "action_result.summary.total_applications",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.message",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "summary.total_objects",
+                    "data_type": "numeric"
+                },
+                {
+                    "data_path": "summary.total_objects_successful",
+                    "data_type": "numeric"
+                }
+            ],
+            "versions": "EQ(*)"
+        }
     ]
 }
