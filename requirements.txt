@@ -1,0 +1,2 @@
+ncclient==0.5.3
+jsonpath_rw==1.4.0
