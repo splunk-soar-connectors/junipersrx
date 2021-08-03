@@ -39,4 +39,4 @@ JUNIPERSRX_ADDRESS_POLICY = "phantom-block-addr-policy"
 JUNIPERSRX_APP_SET = "phantom-app-set"
 JUNIPERSRX_APP_POLICY = "phantom-block-app-policy"
 DEFAULT_TIMEOUT = 100
-DEFAULT_PORT = "830"
+DEFAULT_PORT = "22"

@@ -1,7 +1,7 @@
 {
     "appid": "fd9f7e78-9911-4cd0-8474-a8e3dd7cf6df",
     "name": "Juniper SRX",
-    "description": "This app implements various containment actions like 'block ip' and 'block application' in addition to investigative actions like 'list applications' on a Juniper SRX device.  Uses port 830 by default if no port is set",
+    "description": "This app implements various containment and investigative actions on a Juniper SRX device. Uses port 22 by default if no port is set",
     "type": "firewall",
     "publisher": "Splunk",
     "package_name": "phantom_junipersrx",
@@ -28,6 +28,10 @@
             {
                 "module": "jsonpath_rw",
                 "input_file": "wheels_jsonpath_rw/jsonpath_rw-1.4.0-py2-none-any.whl"
+            },
+            {
+                "module": "ply",
+                "input_file": "wheels_jsonpath_rw/ply-3.11-py2.py3-none-any.whl"
             }
         ]
     },
@@ -43,17 +47,17 @@
             "order": 1,
             "description": "Device Port",
             "required": false,
-            "default": "830"
+            "default": "22"
         },
         "username": {
             "data_type": "string",
-            "order": 3,
+            "order": 2,
             "description": "Username",
             "required": true
         },
         "password": {
             "data_type": "password",
-            "order": 4,
+            "order": 3,
             "description": "Password",
             "required": true
         }
@@ -121,15 +125,26 @@
                     "column_order": 0,
                     "contains": [
                         "ip"
+                    ],
+                    "example_values": [
+                        "2.2.2.2"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -209,15 +224,26 @@
                     "column_order": 0,
                     "contains": [
                         "ip"
+                    ],
+                    "example_values": [
+                        "2.2.2.2"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -298,15 +324,26 @@
                     "column_order": 0,
                     "contains": [
                         "network application"
+                    ],
+                    "example_values": [
+                        "junos-http"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
@@ -386,15 +423,26 @@
                     "column_order": 0,
                     "contains": [
                         "network application"
+                    ],
+                    "example_values": [
+                        "junos-http"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",

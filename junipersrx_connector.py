@@ -42,9 +42,7 @@ class JuniperConnector(BaseConnector):
             return phantom.APP_SUCCESS
 
         config = self.get_config()
-        port = DEFAULT_PORT
-        if config[phantom.APP_JSON_PORT]:
-            port = str(config[phantom.APP_JSON_PORT])
+        port = str(config.get(phantom.APP_JSON_PORT, DEFAULT_PORT))
         # Connectivity
         self.save_progress(phantom.APP_PROG_CONNECTING_TO_ELLIPSES, config[phantom.APP_JSON_DEVICE])
         username = config[phantom.APP_JSON_USERNAME]
@@ -255,7 +253,7 @@ class JuniperConnector(BaseConnector):
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = "delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} ".format(
+            policy_line = "delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}".format(
                 from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY)
             config_cmd.append(policy_line)
 
@@ -266,7 +264,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully unblock application")
 
     def _block_application(self, param):
 
@@ -302,7 +300,11 @@ class JuniperConnector(BaseConnector):
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject log session-init ".format(
+        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject".format(
+            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY)
+        config_cmd.append(policy_line)
+
+        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init".format(
             from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY)
 
         config_cmd.append(policy_line)
@@ -326,7 +328,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully blocked application")
 
     def _get_addr_name(self, ip):
 
@@ -420,7 +422,7 @@ class JuniperConnector(BaseConnector):
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = "delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} ".format(
+            policy_line = "delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}".format(
                 from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY)
             config_cmd.append(policy_line)
 
@@ -431,7 +433,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully unblocked ip")
 
     def _apply_config(self, config_cmd, action_result):
 
@@ -497,7 +499,11 @@ class JuniperConnector(BaseConnector):
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject log session-init ".format(
+        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject".format(
+            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY)
+        config_cmd.append(policy_line)
+
+        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init".format(
             from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY)
 
         config_cmd.append(policy_line)
@@ -521,7 +527,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully blocked ip")
 
     def _list_apps(self, param):
 
@@ -578,7 +584,7 @@ class JuniperConnector(BaseConnector):
 
         action_result.set_summary({JUNIPERSRX_JSON_TOTAL_APPLICATIONS: total_apps})
 
-        return action_result.set_status(phantom.APP_SUCCESS)
+        return action_result.set_status(phantom.APP_SUCCESS, "Successfully recived application list")
 
     def _close_session(self):
 
