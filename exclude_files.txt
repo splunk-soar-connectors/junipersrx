@@ -4,3 +4,4 @@ Makefile
 .gitlab-ci.yml
 *.py
 whitesource-results
+whitesource_setup.sh
