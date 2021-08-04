@@ -23,11 +23,11 @@
         "wheel": [
             {
                 "module": "ncclient",
-                "input_file": "wheels_ncclient/ncclient-0.5.3-py2-none-any.whl"
+                "input_file": "wheels_ncclient/ncclient-0.6.12.tar.gz"
             },
             {
                 "module": "jsonpath_rw",
-                "input_file": "wheels_jsonpath_rw/jsonpath_rw-1.4.0-py2-none-any.whl"
+                "input_file": "wheels_jsonpath_rw/jsonpath-rw-1.4.0.tar.gz"
             },
             {
                 "module": "ply",
