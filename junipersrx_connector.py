@@ -538,9 +538,6 @@ class JuniperConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        if phantom.is_fail(status):
-            return action_result.get_status()
-
         apps = []
         get_app_set = "show configuration groups junos-defaults applications | display xml"
 
