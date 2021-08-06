@@ -14,7 +14,7 @@
     "min_phantom_version": "4.9.39220",
     "python_version": "3",
     "latest_tested_versions": [
-        "On-Prem, Junos Version 21.2R1.10"
+        "Junos Version 21.2R1.10"
     ],
     "logo": "logo_junipernetworks.svg",
     "logo_dark": "logo_junipernetworks_dark.svg",
