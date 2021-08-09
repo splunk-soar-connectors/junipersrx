@@ -1,28 +1,37 @@
 {
     "appid": "fd9f7e78-9911-4cd0-8474-a8e3dd7cf6df",
     "name": "Juniper SRX",
-    "description": "This app implements various containment actions like 'block ip' and 'block application' in addition to investigative actions like 'list applications' on a Juniper SRX device.  Uses port 830 by default if no port is set.",
+    "description": "This app implements various containment and investigative actions on a Juniper SRX device. Uses port 22 by default if no port is set",
     "type": "firewall",
-    "publisher": "Phantom",
+    "publisher": "Splunk",
     "package_name": "phantom_junipersrx",
-    "main_module": "junipersrx_connector.pyc",
-    "app_version": "1.2.19",
+    "main_module": "junipersrx_connector.py",
+    "app_version": "2.0.0",
     "utctime_updated": "2018-12-20T02:53:08.000000Z",
     "product_vendor": "Juniper Networks",
     "product_name": "Juniper SRX",
     "product_version_regex": ".*",
-    "min_phantom_version": "2.1.478",
-    "logo": "juniper.png",
-    "license": "Copyright (c) Phantom Cyber Corporation 2015-2017",
+    "min_phantom_version": "4.9.39220",
+    "python_version": "3",
+    "latest_tested_versions": [
+        "Junos Version 21.2R1.10"
+    ],
+    "logo": "logo_junipernetworks.svg",
+    "logo_dark": "logo_junipernetworks_dark.svg",
+    "license": "Copyright (c) 2015-2021 Splunk Inc.",
     "pip_dependencies": {
         "wheel": [
             {
                 "module": "ncclient",
-                "input_file": "wheels_ncclient/ncclient-0.5.3-py2-none-any.whl"
+                "input_file": "wheels_ncclient/ncclient-0.6.12.tar.gz"
             },
             {
                 "module": "jsonpath_rw",
-                "input_file": "wheels_jsonpath_rw/jsonpath_rw-1.4.0-py2-none-any.whl"
+                "input_file": "wheels_jsonpath_rw/jsonpath-rw-1.4.0.tar.gz"
+            },
+            {
+                "module": "ply",
+                "input_file": "wheels_jsonpath_rw/ply-3.11-py2.py3-none-any.whl"
             }
         ]
     },
@@ -38,17 +47,17 @@
             "order": 1,
             "description": "Device Port",
             "required": false,
-            "default": "830"
+            "default": "22"
         },
         "username": {
             "data_type": "string",
-            "order": 3,
+            "order": 2,
             "description": "Username",
             "required": true
         },
         "password": {
             "data_type": "password",
-            "order": 4,
+            "order": 3,
             "description": "Password",
             "required": true
         }
@@ -56,7 +65,7 @@
     "actions": [
         {
             "action": "test connectivity",
-            "description": "Validate the asset configuration for connectivity. This action tries to login to the device to check the connection and credentials.",
+            "description": "Validate the asset configuration for connectivity. This action tries to login to the device to check the connection and credentials",
             "type": "test",
             "identifier": "test_asset_connectivity",
             "read_only": true,
@@ -116,21 +125,36 @@
                     "column_order": 0,
                     "contains": [
                         "ip"
+                    ],
+                    "example_values": [
+                        "2.2.2.2"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -151,7 +175,7 @@
         },
         {
             "action": "unblock ip",
-            "description": "Unblock an IP.",
+            "description": "Unblock an IP",
             "type": "correct",
             "identifier": "unblock_ip",
             "undo": "block ip",
@@ -200,21 +224,36 @@
                     "column_order": 0,
                     "contains": [
                         "ip"
+                    ],
+                    "example_values": [
+                        "2.2.2.2"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -285,21 +324,36 @@
                     "column_order": 0,
                     "contains": [
                         "network application"
+                    ],
+                    "example_values": [
+                        "junos-http"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -369,21 +423,36 @@
                     "column_order": 0,
                     "contains": [
                         "network application"
+                    ],
+                    "example_values": [
+                        "junos-http"
                     ]
                 },
                 {
                     "data_path": "action_result.parameter.to_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.parameter.from_zone",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "trust",
+                        "untrust"
+                    ]
                 },
                 {
                     "data_path": "action_result.status",
                     "data_type": "string",
                     "column_name": "Status",
-                    "column_order": 1
+                    "column_order": 1,
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.message",
@@ -418,7 +487,11 @@
             "output": [
                 {
                     "data_path": "action_result.status",
-                    "data_type": "string"
+                    "data_type": "string",
+                    "example_values": [
+                        "success",
+                        "failed"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.name",
