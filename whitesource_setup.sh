@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# cryptography dependencies
-apk add gcc musl-dev python3-dev libffi-dev openssl-dev
+# cryptography and lxml dependencies
+apk add gcc musl-dev python3-dev libffi-dev openssl-dev libxml2-dev libxslt-dev
 # need to manually compile a newer version of rust because the version
 # available in the alpine base image's repos is too old
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
