@@ -1,4 +1,6 @@
 docker-compose.yml
 Makefile
-*.py
 .git*
+.gitlab-ci.yml
+whitesource-results
+whitesource_setup.sh

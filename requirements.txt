@@ -1,0 +1,3 @@
+ncclient==0.6.12
+jsonpath_rw==1.4.0
+ply==3.11
