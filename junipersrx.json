@@ -1,7 +1,7 @@
 {
     "appid": "fd9f7e78-9911-4cd0-8474-a8e3dd7cf6df",
     "name": "Juniper SRX",
-    "description": "This app implements various containment and investigative actions on a Juniper SRX device. Uses port 22 by default if no port is set",
+    "description": "This app implements various containment and investigative actions on a Juniper SRX device. Uses port 830 by default if no port is set",
     "type": "firewall",
     "publisher": "Splunk",
     "package_name": "phantom_junipersrx",
@@ -47,7 +47,7 @@
             "order": 1,
             "description": "Device Port",
             "required": false,
-            "default": "22"
+            "default": "830"
         },
         "username": {
             "data_type": "string",
