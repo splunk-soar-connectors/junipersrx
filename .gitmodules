@@ -1,8 +1,0 @@
-[submodule "wheels_jsonpath_rw"]
-	path = wheels_jsonpath_rw
-	url = git@cd.splunkdev.com:phantom-external/jsonpath_rw.git
-    ignore = dirty
-[submodule "wheels_ncclient"]
-	path = wheels_ncclient
-	url = git@cd.splunkdev.com:phantom-external/ncclient.git
-    ignore = dirty
