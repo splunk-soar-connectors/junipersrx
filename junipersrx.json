@@ -24,11 +24,11 @@
         "wheel": [
             {
                 "module": "PyNaCl",
-                "input_file": "wheels/PyNaCl-1.4.0-cp35-abi3-manylinux1_x86_64.manylinux_2_5_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/PyNaCl-1.5.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "bcrypt",
-                "input_file": "wheels/bcrypt-3.2.0-cp36-abi3-manylinux2010_x86_64.manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/bcrypt-3.2.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl"
             },
             {
                 "module": "cffi",
@@ -36,11 +36,11 @@
             },
             {
                 "module": "cryptography",
-                "input_file": "wheels/cryptography-36.0.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/cryptography-36.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "decorator",
-                "input_file": "wheels/decorator-5.1.0-py3-none-any.whl"
+                "input_file": "wheels/decorator-5.1.1-py3-none-any.whl"
             },
             {
                 "module": "jsonpath_rw",
@@ -48,7 +48,7 @@
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/lxml-4.6.4-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl"
+                "input_file": "wheels/lxml-4.7.1-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -56,7 +56,7 @@
             },
             {
                 "module": "paramiko",
-                "input_file": "wheels/paramiko-2.8.1-py2.py3-none-any.whl"
+                "input_file": "wheels/paramiko-2.9.2-py2.py3-none-any.whl"
             },
             {
                 "module": "ply",
@@ -68,7 +68,7 @@
             },
             {
                 "module": "setuptools",
-                "input_file": "wheels/setuptools-59.4.0-py3-none-any.whl"
+                "input_file": "wheels/setuptools-59.6.0-py3-none-any.whl"
             },
             {
                 "module": "simplejson",
