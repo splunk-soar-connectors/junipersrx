@@ -19,7 +19,7 @@
     ],
     "logo": "logo_junipernetworks.svg",
     "logo_dark": "logo_junipernetworks_dark.svg",
-    "license": "Copyright (c) 2015-2022 Splunk Inc.",
+    "license": "Copyright (c) 2016-2023 Splunk Inc.",
     "configuration": {
         "device": {
             "data_type": "string",
