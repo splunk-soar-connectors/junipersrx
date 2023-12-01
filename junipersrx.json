@@ -6,8 +6,8 @@
     "publisher": "Splunk",
     "package_name": "phantom_junipersrx",
     "main_module": "junipersrx_connector.py",
-    "app_version": "2.0.12",
-    "utctime_updated": "2022-02-03T21:15:37.000000Z",
+    "app_version": "2.0.13",
+    "utctime_updated": "2023-12-01T11:37:32.000000Z",
     "product_vendor": "Juniper Networks",
     "product_name": "Juniper SRX",
     "product_version_regex": ".*",
@@ -585,7 +585,7 @@
             },
             {
                 "module": "bcrypt",
-                "input_file": "wheels/py36/bcrypt-4.0.1-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py3/bcrypt-4.1.1-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "cffi",
@@ -593,7 +593,7 @@
             },
             {
                 "module": "cryptography",
-                "input_file": "wheels/py3/cryptography-41.0.5-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py3/cryptography-41.0.7-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "decorator",
@@ -625,7 +625,7 @@
             },
             {
                 "module": "setuptools",
-                "input_file": "wheels/py3/setuptools-68.2.2-py3-none-any.whl"
+                "input_file": "wheels/py3/setuptools-69.0.2-py3-none-any.whl"
             },
             {
                 "module": "simplejson",
