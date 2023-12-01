@@ -1,2 +1,1 @@
 **Unreleased**
-* Updated vulnerable paramiko package to safe version [PAPP-32410]
