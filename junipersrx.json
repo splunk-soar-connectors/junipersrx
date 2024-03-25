@@ -6,7 +6,7 @@
     "publisher": "Splunk",
     "package_name": "phantom_junipersrx",
     "main_module": "junipersrx_connector.py",
-    "app_version": "2.0.13",
+    "app_version": "2.0.14",
     "utctime_updated": "2023-12-01T11:37:32.000000Z",
     "product_vendor": "Juniper Networks",
     "product_name": "Juniper SRX",
@@ -19,7 +19,7 @@
     ],
     "logo": "logo_junipernetworks.svg",
     "logo_dark": "logo_junipernetworks_dark.svg",
-    "license": "Copyright (c) 2016-2023 Splunk Inc.",
+    "license": "Copyright (c) 2016-2024 Splunk Inc.",
     "configuration": {
         "device": {
             "data_type": "string",
@@ -528,10 +528,6 @@
                 "input_file": "wheels/py36/cffi-1.15.1-cp36-cp36m-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
-                "module": "cryptography",
-                "input_file": "wheels/py36/cryptography-40.0.2-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-            },
-            {
                 "module": "decorator",
                 "input_file": "wheels/py3/decorator-5.1.1-py3-none-any.whl"
             },
@@ -541,7 +537,7 @@
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py36/lxml-4.9.3-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl"
+                "input_file": "wheels/py36/lxml-5.1.0-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -585,15 +581,11 @@
             },
             {
                 "module": "bcrypt",
-                "input_file": "wheels/py3/bcrypt-4.1.1-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py39/bcrypt-4.1.2-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "cffi",
                 "input_file": "wheels/py39/cffi-1.16.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-            },
-            {
-                "module": "cryptography",
-                "input_file": "wheels/py3/cryptography-41.0.7-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "decorator",
@@ -605,7 +597,7 @@
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py39/lxml-4.9.3-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl"
+                "input_file": "wheels/py39/lxml-5.1.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -625,7 +617,7 @@
             },
             {
                 "module": "setuptools",
-                "input_file": "wheels/py3/setuptools-69.0.2-py3-none-any.whl"
+                "input_file": "wheels/py3/setuptools-69.2.0-py3-none-any.whl"
             },
             {
                 "module": "simplejson",
