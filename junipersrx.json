@@ -66,6 +66,10 @@
             "identifier": "block_ip",
             "undo": "unblock ip",
             "read_only": false,
+            "lock": {
+                "enabled": true,
+                "concurrency": false
+            },
             "parameters": {
                 "ip": {
                     "description": "IP to block",
@@ -165,6 +169,10 @@
             "identifier": "unblock_ip",
             "undo": "block ip",
             "read_only": false,
+            "lock": {
+                "enabled": true,
+                "concurrency": false
+            },
             "parameters": {
                 "ip": {
                     "description": "IP to block",
@@ -265,6 +273,10 @@
             "identifier": "block_application",
             "read_only": false,
             "undo": "unblock application",
+            "lock": {
+                "enabled": true,
+                "concurrency": false
+            },
             "parameters": {
                 "application": {
                     "description": "Application to block",
@@ -364,6 +376,10 @@
             "identifier": "unblock_application",
             "read_only": false,
             "undo": "block application",
+            "lock": {
+                "enabled": true,
+                "concurrency": false
+            },
             "parameters": {
                 "application": {
                     "description": "Application to unblock",
