@@ -533,7 +533,19 @@
         "wheel": [
             {
                 "module": "PyNaCl",
-                "input_file": "wheels/py36/PyNaCl-1.5.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py36/PyNaCl-1.5.0-cp36-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+            },
+            {
+                "module": "bcrypt",
+                "input_file": "wheels/py36/bcrypt-4.0.1-cp36-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+            },
+            {
+                "module": "cffi",
+                "input_file": "wheels/py36/cffi-1.15.1-cp36-cp36m-manylinux1_x86_64.manylinux_2_5_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+            },
+            {
+                "module": "cryptography",
+                "input_file": "wheels/py36/cryptography-40.0.2-cp36-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
             },
             {
                 "module": "decorator",
@@ -545,7 +557,7 @@
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py36/lxml-5.1.0-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py36/lxml-5.3.0-cp36-cp36m-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -558,6 +570,10 @@
             {
                 "module": "ply",
                 "input_file": "wheels/shared/ply-3.11-py2.py3-none-any.whl"
+            },
+            {
+                "module": "pycparser",
+                "input_file": "wheels/shared/pycparser-2.21-py2.py3-none-any.whl"
             },
             {
                 "module": "setuptools",
@@ -566,14 +582,6 @@
             {
                 "module": "simplejson",
                 "input_file": "wheels/py36/simplejson-3.17.2-cp36-cp36m-manylinux2010_x86_64.manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "xmltodict",
-                "input_file": "wheels/shared/xmltodict-0.12.0-py2.py3-none-any.whl"
             }
         ]
     },
@@ -581,7 +589,19 @@
         "wheel": [
             {
                 "module": "PyNaCl",
-                "input_file": "wheels/py36/PyNaCl-1.5.0-cp36-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py36/PyNaCl-1.5.0-cp36-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+            },
+            {
+                "module": "bcrypt",
+                "input_file": "wheels/py39/bcrypt-4.2.0-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+            },
+            {
+                "module": "cffi",
+                "input_file": "wheels/py39/cffi-1.17.1-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+            },
+            {
+                "module": "cryptography",
+                "input_file": "wheels/py39/cryptography-43.0.1-cp39-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
             },
             {
                 "module": "decorator",
@@ -593,7 +613,7 @@
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py39/lxml-5.1.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+                "input_file": "wheels/py39/lxml-5.3.0-cp39-cp39-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -608,20 +628,16 @@
                 "input_file": "wheels/shared/ply-3.11-py2.py3-none-any.whl"
             },
             {
+                "module": "pycparser",
+                "input_file": "wheels/py3/pycparser-2.22-py3-none-any.whl"
+            },
+            {
                 "module": "setuptools",
-                "input_file": "wheels/py3/setuptools-69.2.0-py3-none-any.whl"
+                "input_file": "wheels/py3/setuptools-75.1.0-py3-none-any.whl"
             },
             {
                 "module": "simplejson",
                 "input_file": "wheels/py39/simplejson-3.17.2-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
-            },
-            {
-                "module": "six",
-                "input_file": "wheels/shared/six-1.16.0-py2.py3-none-any.whl"
-            },
-            {
-                "module": "xmltodict",
-                "input_file": "wheels/shared/xmltodict-0.12.0-py2.py3-none-any.whl"
             }
         ]
     }
