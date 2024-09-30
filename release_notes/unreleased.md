@@ -1,2 +1,2 @@
 **Unreleased**
-Updated dependencies [PAPP-34751]
+* Updated dependencies [PAPP-34751]
