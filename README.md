@@ -6,7 +6,7 @@ Connector Version: 2.0.17
 Product Vendor: Juniper Networks  
 Product Name: Juniper SRX  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 6.2.2  
+Minimum Product Version: 6.3.0  
 
 This app implements various containment and investigative actions on a Juniper SRX device. Uses port 830 by default if no port is set
 
