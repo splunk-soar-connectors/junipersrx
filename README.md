@@ -10,8 +10,8 @@ Minimum Product Version: 6.3.0
 
 This app implements various containment and investigative actions on a Juniper SRX device. Uses port 830 by default if no port is set
 
-### Configuration Variables
-The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a Juniper SRX asset in SOAR.
+### Configuration variables
+This table lists the configuration variables required to operate Juniper SRX. These variables are specified when configuring a Juniper SRX asset in Splunk SOAR.
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
