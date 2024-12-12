@@ -2,7 +2,7 @@
 # Juniper SRX
 
 Publisher: Splunk  
-Connector Version: 2.0.17  
+Connector Version: 2.0.18  
 Product Vendor: Juniper Networks  
 Product Name: Juniper SRX  
 Product Version Supported (regex): ".\*"  
