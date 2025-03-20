@@ -19,7 +19,7 @@
     ],
     "logo": "logo_junipernetworks.svg",
     "logo_dark": "logo_junipernetworks_dark.svg",
-    "license": "Copyright (c) 2016-2024 Splunk Inc.",
+    "license": "Copyright (c) 2016-2025 Splunk Inc.",
     "configuration": {
         "device": {
             "data_type": "string",
@@ -158,6 +158,10 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.ph",
+                    "data_type": "ph"
                 }
             ],
             "versions": "EQ(*)"
@@ -261,6 +265,10 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.ph",
+                    "data_type": "ph"
                 }
             ],
             "versions": "EQ(*)"
@@ -365,6 +373,10 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.ph",
+                    "data_type": "ph"
                 }
             ],
             "versions": "EQ(*)"
@@ -468,6 +480,10 @@
                 {
                     "data_path": "summary.total_objects_successful",
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.parameter.ph",
+                    "data_type": "ph"
                 }
             ],
             "versions": "EQ(*)"

@@ -1,6 +1,6 @@
 # File: junipersrx_connector.py
 #
-# Copyright (c) 2016-2024 Splunk Inc.
+# Copyright (c) 2016-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ from junipersrx_consts import *
 
 
 class JuniperConnector(BaseConnector):
-
     # The actions supported by this connector
     ACTION_ID_BLOCK_APPLICATION = "block_application"
     ACTION_ID_UNBLOCK_APPLICATION = "unblock_application"
@@ -36,14 +35,12 @@ class JuniperConnector(BaseConnector):
     ACTION_ID_LIST_APPS = "list_apps"
 
     def __init__(self):
-
         # Call the BaseConnectors init first
-        super(JuniperConnector, self).__init__()
+        super().__init__()
 
         self._conn = None
 
     def _get_conn(self):
-
         if self._conn is not None:
             # conn already created for this call
             return phantom.APP_SUCCESS
@@ -74,7 +71,6 @@ class JuniperConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _test_connectivity(self, param):
-
         status = self._get_conn()
 
         if phantom.is_fail(status):
@@ -84,14 +80,13 @@ class JuniperConnector(BaseConnector):
         return self.set_status_save_progress(phantom.APP_SUCCESS, JUNIPERSRX_SUCC_TEST_CONNECTIVITY_PASSED)
 
     def _get_application_set_apps(self, param, action_result):
-
         apps = []
-        get_app_set = "show configuration applications application-set {app_set} | display xml".format(app_set=JUNIPERSRX_APP_SET)
+        get_app_set = f"show configuration applications application-set {JUNIPERSRX_APP_SET} | display xml"
 
         try:
             response = self._conn.command(command=get_app_set, format="xml")
         except Exception as e:
-            self.debug_print("command Exception: {0}".format(str(e)))
+            self.debug_print(f"command Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_COMMAND_EXEC, e), apps)
 
         response_dict = None
@@ -99,7 +94,7 @@ class JuniperConnector(BaseConnector):
         try:
             response_dict = xmltodict.parse(response.tostring)
         except Exception as e:
-            self.debug_print("parse Exception: {0}".format(str(e)))
+            self.debug_print(f"parse Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_PARSE_RESPONSE, e), apps)
 
         if not response_dict:
@@ -119,16 +114,15 @@ class JuniperConnector(BaseConnector):
         return (phantom.APP_SUCCESS, apps)
 
     def _get_address_set_addresses(self, param, action_result):
-
         addresses = []
-        get_address_set = "show configuration security address-book {addr_book} address-set {addr_set} | display xml".format(
-            addr_book=JUNIPERSRX_ADDRESS_BOOK, addr_set=JUNIPERSRX_ADDRESS_SET
+        get_address_set = (
+            f"show configuration security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {JUNIPERSRX_ADDRESS_SET} | display xml"
         )
 
         try:
             response = self._conn.command(command=get_address_set, format="xml")
         except Exception as e:
-            self.debug_print("command Exception: {0}".format(str(e)))
+            self.debug_print(f"command Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_COMMAND_EXEC, e), addresses)
 
         response_dict = None
@@ -136,7 +130,7 @@ class JuniperConnector(BaseConnector):
         try:
             response_dict = xmltodict.parse(response.tostring)
         except Exception as e:
-            self.debug_print("parse Exception: {0}".format(str(e)))
+            self.debug_print(f"parse Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_PARSE_RESPONSE, e), addresses)
 
         if not response_dict:
@@ -156,21 +150,18 @@ class JuniperConnector(BaseConnector):
         return (phantom.APP_SUCCESS, addresses)
 
     def _get_first_allow_policy(self, param, action_result):
-
         policy_name = None
 
         from_zone = param[JUNIPERSRX_JSON_FROM_ZONE]
 
         to_zone = param[JUNIPERSRX_JSON_TO_ZONE]
 
-        get_config_cmd = "show security policies from-zone {from_zone} to-zone {to_zone} | display xml".format(
-            from_zone=from_zone, to_zone=to_zone
-        )
+        get_config_cmd = f"show security policies from-zone {from_zone} to-zone {to_zone} | display xml"
 
         try:
             response = self._conn.command(command=get_config_cmd, format="xml")
         except Exception as e:
-            self.debug_print("command Exception: {0}".format(str(e)))
+            self.debug_print(f"command Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_COMMAND_EXEC, e), policy_name)
 
         response_dict = None
@@ -178,7 +169,7 @@ class JuniperConnector(BaseConnector):
         try:
             response_dict = xmltodict.parse(response.tostring)
         except Exception as e:
-            self.debug_print("parse Exception: {0}".format(str(e)))
+            self.debug_print(f"parse Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_PARSE_RESPONSE, e), policy_name)
 
         if not response_dict:
@@ -197,24 +188,24 @@ class JuniperConnector(BaseConnector):
         lowest_seq_number = len(policies) + 1
 
         for i, policy in enumerate(policies):
-            self.debug_print("Policy[{0}]:".format(i), policy)
+            self.debug_print(f"Policy[{i}]:", policy)
             seq_no = policy["policy-information"]["policy-sequence-number"]
             action = policy["policy-information"]["policy-action"]["action-type"]
 
-            self.debug_print("Lowest Seq No: {2}, Seq No: {0}, Action: {1}".format(seq_no, action, lowest_seq_number))
+            self.debug_print(f"Lowest Seq No: {lowest_seq_number}, Seq No: {seq_no}, Action: {action}")
 
             if action != "permit":
-                self.debug_print("{0} != permit, continue".format(action))
+                self.debug_print(f"{action} != permit, continue")
                 # ignore
                 continue
 
             if int(seq_no) >= int(lowest_seq_number):
-                self.debug_print("{0} >= {1}, continue".format(seq_no, lowest_seq_number))
+                self.debug_print(f"{seq_no} >= {lowest_seq_number}, continue")
                 continue
 
             lowest_seq_number = seq_no
             policy_name = policy["policy-information"]["policy-name"]
-            self.debug_print("Got a lower permit, now Lowest Seq #: {0} of Name: {1}".format(lowest_seq_number, policy_name))
+            self.debug_print(f"Got a lower permit, now Lowest Seq #: {lowest_seq_number} of Name: {policy_name}")
 
         if policy_name is None:
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_NO_ALLOW_POLICY_ENTRIES_FOUND), policy_name)
@@ -222,7 +213,6 @@ class JuniperConnector(BaseConnector):
         return (phantom.APP_SUCCESS, policy_name)
 
     def _unblock_application(self, param):
-
         status = self._get_conn()
 
         if phantom.is_fail(status):
@@ -262,16 +252,12 @@ class JuniperConnector(BaseConnector):
         remove_policy = True if len(apps) == 1 else False
 
         # remove the app from the app-set
-        app_set_line = "delete applications application-set {app_set_name} application {app_name}".format(
-            app_set_name=JUNIPERSRX_APP_SET, app_name=app_name
-        )
+        app_set_line = f"delete applications application-set {JUNIPERSRX_APP_SET} application {app_name}"
         config_cmd.append(app_set_line)
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = "delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}".format(
-                from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY
-            )
+            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY}"
             config_cmd.append(policy_line)
 
         self.send_progress(JUNIPERSRX_MSG_REMOVING_POLICY)
@@ -284,7 +270,6 @@ class JuniperConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully unblock application")
 
     def _block_application(self, param):
-
         status = self._get_conn()
 
         if phantom.is_fail(status):
@@ -305,27 +290,21 @@ class JuniperConnector(BaseConnector):
         config_cmd = []
 
         # First Add the application to the application set
-        app_set = "set applications application-set {app_set} application {block_app}".format(app_set=JUNIPERSRX_APP_SET, block_app=block_app)
+        app_set = f"set applications application-set {JUNIPERSRX_APP_SET} application {block_app}"
         config_cmd.append(app_set)
 
         # create policy
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} match source-address any ".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY
-        )
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} match source-address any "
 
-        policy_line += "destination-address any application {app_set}".format(app_set=JUNIPERSRX_APP_SET)
+        policy_line += f"destination-address any application {JUNIPERSRX_APP_SET}"
 
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY
-        )
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} then reject"
         config_cmd.append(policy_line)
 
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY
-        )
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} then log session-init"
 
         config_cmd.append(policy_line)
 
@@ -333,13 +312,13 @@ class JuniperConnector(BaseConnector):
 
         status, permit_rule = self._get_first_allow_policy(param, action_result)
 
-        self.debug_print("Got first rule: {0}, status: {1}".format(permit_rule, status))
+        self.debug_print(f"Got first rule: {permit_rule}, status: {status}")
 
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        insert_line = "insert security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} before policy {permit_rule}".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_APP_POLICY, permit_rule=permit_rule
+        insert_line = (
+            f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} before policy {permit_rule}"
         )
 
         config_cmd.append(insert_line)
@@ -352,22 +331,20 @@ class JuniperConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully blocked application")
 
     def _get_addr_name(self, ip):
-
         # Remove the slash in the ip if present
         rem_slash = lambda x: re.sub(r"(.*)/(.*)", r"\1-\2", x)
 
-        name = "{0}".format(rem_slash(ip))
+        name = f"{rem_slash(ip)}"
 
         return name
 
     def _add_address(self, block_ip, config_cmd, action_result):
-
         type = None
         name = None
 
         container_id = self.get_container_id()
 
-        description = "Last updated by container {0}".format(container_id)
+        description = f"Last updated by container {container_id}"
 
         name = self._get_addr_name(block_ip)
         value = block_ip
@@ -381,20 +358,15 @@ class JuniperConnector(BaseConnector):
         else:
             type = " "
 
-        address_book_line = 'set security address-book {addr_book_name} address {addr_name} description "{description}" {type} {value}'.format(
-            addr_book_name=JUNIPERSRX_ADDRESS_BOOK, addr_name=name, description=description, type=type, value=value
-        )
+        address_book_line = f'set security address-book {JUNIPERSRX_ADDRESS_BOOK} address {name} description "{description}" {type} {value}'
         config_cmd.append(address_book_line)
 
-        address_set_line = "set security address-book {addr_book_name} address-set {addr_set_name} address {addr_name}".format(
-            addr_book_name=JUNIPERSRX_ADDRESS_BOOK, addr_set_name=JUNIPERSRX_ADDRESS_SET, addr_name=name
-        )
+        address_set_line = f"set security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {JUNIPERSRX_ADDRESS_SET} address {name}"
         config_cmd.append(address_set_line)
 
         return (phantom.APP_SUCCESS, name)
 
     def _unblock_ip(self, param):
-
         status = self._get_conn()
 
         if phantom.is_fail(status):
@@ -434,22 +406,16 @@ class JuniperConnector(BaseConnector):
         remove_policy = True if len(addresses) == 1 else False
 
         # remove the address from the address-set
-        address_set_line = "delete security address-book {addr_book_name} address-set {addr_set_name} address {addr_name}".format(
-            addr_book_name=JUNIPERSRX_ADDRESS_BOOK, addr_set_name=JUNIPERSRX_ADDRESS_SET, addr_name=addr_name
-        )
+        address_set_line = f"delete security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {JUNIPERSRX_ADDRESS_SET} address {addr_name}"
         config_cmd.append(address_set_line)
 
         # remove the address from the address book
-        address_book_line = "delete security address-book {addr_book_name} address {addr_name}".format(
-            addr_book_name=JUNIPERSRX_ADDRESS_BOOK, addr_name=addr_name
-        )
+        address_book_line = f"delete security address-book {JUNIPERSRX_ADDRESS_BOOK} address {addr_name}"
         config_cmd.append(address_book_line)
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = "delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}".format(
-                from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY
-            )
+            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY}"
             config_cmd.append(policy_line)
 
         self.send_progress(JUNIPERSRX_MSG_REMOVING_POLICY)
@@ -462,32 +428,30 @@ class JuniperConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully unblocked ip")
 
     def _apply_config(self, config_cmd, action_result):
-
         self.debug_print("config_cmd: ", config_cmd)
 
         try:
             self._conn.load_configuration(action="set", config=config_cmd)
         except Exception as e:
-            self.debug_print("load_configuration Exception: {0}".format(str(e)))
+            self.debug_print(f"load_configuration Exception: {e!s}")
             return action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_CONFIG_LOAD_FAILED, e)
 
         try:
             self._conn.validate()
         except Exception as e:
-            self.debug_print("validate Exception: {0}".format(str(e)))
+            self.debug_print(f"validate Exception: {e!s}")
             return action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_CONFIG_VALIDATION_FAILED, e)
 
         # Now Commit the config
         try:
             self._conn.commit()
         except Exception as e:
-            self.debug_print("commit Exception: {0}".format(str(e)))
+            self.debug_print(f"commit Exception: {e!s}")
             return action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_CONFIG_COMMIT_FAILED, e)
 
         return phantom.APP_SUCCESS
 
     def _block_ip(self, param):
-
         status = self._get_conn()
 
         if phantom.is_fail(status):
@@ -517,23 +481,19 @@ class JuniperConnector(BaseConnector):
         # for them first else it spits an error.
 
         # create policy
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} match source-address any ".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY
+        policy_line = (
+            f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} match source-address any "
         )
 
-        policy_line += "destination-address {addr_set} application any".format(addr_set=JUNIPERSRX_ADDRESS_SET)
+        policy_line += f"destination-address {JUNIPERSRX_ADDRESS_SET} application any"
 
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY
-        )
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} then reject"
         config_cmd.append(policy_line)
 
-        policy_line = "set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY
-        )
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} then log session-init"
 
         config_cmd.append(policy_line)
 
@@ -541,13 +501,13 @@ class JuniperConnector(BaseConnector):
 
         status, permit_rule = self._get_first_allow_policy(param, action_result)
 
-        self.debug_print("Got first rule: {0}, status: {1}".format(permit_rule, status))
+        self.debug_print(f"Got first rule: {permit_rule}, status: {status}")
 
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        insert_line = "insert security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} before policy {permit_rule}".format(
-            from_zone=from_zone, to_zone=to_zone, policy_name=JUNIPERSRX_ADDRESS_POLICY, permit_rule=permit_rule
+        insert_line = (
+            f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} before policy {permit_rule}"
         )
 
         config_cmd.append(insert_line)
@@ -560,7 +520,6 @@ class JuniperConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully blocked ip")
 
     def _list_apps(self, param):
-
         status = self._get_conn()
 
         if phantom.is_fail(status):
@@ -574,7 +533,7 @@ class JuniperConnector(BaseConnector):
         try:
             response = self._conn.command(command=get_app_set, format="xml")
         except Exception as e:
-            self.debug_print("command Exception: {0}".format(str(e)))
+            self.debug_print(f"command Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_COMMAND_EXEC, e), apps)
 
         response_dict = None
@@ -582,7 +541,7 @@ class JuniperConnector(BaseConnector):
         try:
             response_dict = xmltodict.parse(response.tostring)
         except Exception as e:
-            self.debug_print("parse Exception: {0}".format(str(e)))
+            self.debug_print(f"parse Exception: {e!s}")
             return (action_result.set_status(phantom.APP_ERROR, JUNIPERSRX_ERR_PARSE_RESPONSE, e), apps)
 
         if not response_dict:
@@ -614,7 +573,6 @@ class JuniperConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully recived application list")
 
     def _close_session(self):
-
         if self._conn is not None:
             try:
                 self._conn.unlock()
@@ -637,7 +595,6 @@ class JuniperConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def handle_action(self, param):
-
         result = None
         action = self.get_action_identifier()
 
@@ -660,7 +617,6 @@ class JuniperConnector(BaseConnector):
 
 
 if __name__ == "__main__":
-
     import sys
 
     try:
