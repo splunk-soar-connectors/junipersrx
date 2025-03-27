@@ -1,4 +1,69 @@
 Splunk SOAR Juniper SRX
-Copyright (c) 2016-2024 Splunk Inc.
+Copyright (c) 2016-2025 Splunk Inc.
 
-Third-party Software Attributions:
+Third Party Software Attributions:
+
+Name: bcrypt
+Version: 4.3.0
+Author:
+License: Apache-2.0
+
+Name: cffi
+Version: 1.17.1
+Author: Armin Rigo, Maciej Fijalkowski
+License: MIT
+
+Name: cryptography
+Version: 44.0.2
+Author: The cryptography developers <cryptography-dev@python.org>
+License: Apache-2.0 OR BSD-3-Clause
+
+Name: decorator
+Version: 5.2.1
+Author:
+License: BSD-2-Clause
+
+Name: jsonpath-rw
+Version: 1.4.0
+Author: Kenneth Knowles
+License: Apache 2.0
+
+Name: lxml
+Version: 5.3.1
+Author: lxml dev team
+License: BSD-3-Clause
+
+Name: ncclient
+Version: 0.6.12
+Author: Shikhar Bhushan, Leonidas Poulopoulos, Ebben Aries, Einar Nilsen-Nygaard
+License: Apache 2.0
+
+Name: paramiko
+Version: 3.5.0
+Author: Jeff Forcier
+License: LGPL
+
+Name: ply
+Version: 3.11
+Author: David Beazley
+License: BSD
+
+Name: pycparser
+Version: 2.22
+Author: Eli Bendersky
+License: BSD-3-Clause
+
+Name: PyNaCl
+Version: 1.5.0
+Author: The PyNaCl developers
+License: Apache License 2.0
+
+Name: simplejson
+Version: 3.17.2
+Author: Bob Ippolito
+License: MIT License
+
+Name: six
+Version: 1.17.0
+Author: Benjamin Peterson
+License: MIT
