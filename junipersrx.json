@@ -7,12 +7,15 @@
     "package_name": "phantom_junipersrx",
     "main_module": "junipersrx_connector.py",
     "app_version": "2.0.18",
-    "utctime_updated": "2024-12-12T23:42:52.000000Z",
+    "utctime_updated": "2025-07-30T17:47:37.328065Z",
     "product_vendor": "Juniper Networks",
     "product_name": "Juniper SRX",
     "product_version_regex": ".*",
     "min_phantom_version": "6.3.0",
-    "python_version": ["3.9", "3.13"],
+    "python_version": [
+        "3.9",
+        "3.13"
+    ],
     "fips_compliant": true,
     "latest_tested_versions": [
         "Junos Version 21.2R1.10"
