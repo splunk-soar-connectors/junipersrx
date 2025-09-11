@@ -1,9 +1,9 @@
 # Juniper SRX
 
-Publisher: Splunk \
-Connector Version: 2.0.20 \
-Product Vendor: Juniper Networks \
-Product Name: Juniper SRX \
+Publisher: Splunk <br>
+Connector Version: 2.0.20 <br>
+Product Vendor: Juniper Networks <br>
+Product Name: Juniper SRX <br>
 Minimum Product Version: 6.3.0
 
 This app implements various containment and investigative actions on a Juniper SRX device. Uses port 830 by default if no port is set
@@ -21,18 +21,18 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity. This action tries to login to the device to check the connection and credentials \
-[block ip](#action-block-ip) - Block an IP \
-[unblock ip](#action-unblock-ip) - Unblock an IP \
-[block application](#action-block-application) - Block an application \
-[unblock application](#action-unblock-application) - Unblock an application \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity. This action tries to login to the device to check the connection and credentials <br>
+[block ip](#action-block-ip) - Block an IP <br>
+[unblock ip](#action-unblock-ip) - Unblock an IP <br>
+[block application](#action-block-application) - Block an application <br>
+[unblock application](#action-unblock-application) - Unblock an application <br>
 [list applications](#action-list-applications) - List the application that the device knows about and can block
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity. This action tries to login to the device to check the connection and credentials
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -47,7 +47,7 @@ No Output
 
 Block an IP
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 This action creates address book and address set entries on the SRX device with the specified IP address. This address book is attached to the required zones and used in the 'phantom-block-address-policy'. A 'reject' action is configured for the security policy. The last step is to move the security policy to the top of the list. The container id of the phantom action is added in the description field to the address entry when it's created.
@@ -77,7 +77,7 @@ action_result.parameter.ph | ph | | |
 
 Unblock an IP
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -105,7 +105,7 @@ action_result.parameter.ph | ph | | |
 
 Block an application
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 This action adds the specified application to a Phantom created application set. The created application set is configured as the 'application' to the 'phantom-block-app-policy'. A 'reject' action is configured for the security policy. The last step is to move the security policy to the top of the list.
@@ -135,7 +135,7 @@ action_result.parameter.ph | ph | | |
 
 Unblock an application
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -163,7 +163,7 @@ action_result.parameter.ph | ph | | |
 
 List the application that the device knows about and can block
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
