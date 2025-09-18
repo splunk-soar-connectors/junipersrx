@@ -557,7 +557,7 @@
             },
             {
                 "module": "cryptography",
-                "input_file": "wheels/py3/cryptography-45.0.7-cp37-abi3-manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py3/cryptography-46.0.1-cp38-abi3-manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "decorator",
@@ -569,7 +569,7 @@
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py39/lxml-6.0.1-cp39-cp39-manylinux_2_26_x86_64.manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py39/lxml-6.0.1-cp39-cp39-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -589,11 +589,11 @@
             },
             {
                 "module": "pynacl",
-                "input_file": "wheels/py3/pynacl-1.6.0-cp38-abi3-manylinux_2_26_x86_64.manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py3/pynacl-1.6.0-cp38-abi3-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
-                "module": "simplejson",
-                "input_file": "wheels/py39/simplejson-3.17.2-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_28_x86_64.whl"
+                "module": "typing_extensions",
+                "input_file": "wheels/py3/typing_extensions-4.15.0-py3-none-any.whl"
             }
         ]
     },
@@ -661,7 +661,7 @@
             },
             {
                 "module": "cryptography",
-                "input_file": "wheels/py3/cryptography-45.0.7-cp311-abi3-manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py3/cryptography-46.0.1-cp311-abi3-manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "decorator",
@@ -673,7 +673,7 @@
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py313/lxml-6.0.1-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py313/lxml-6.0.1-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -693,11 +693,7 @@
             },
             {
                 "module": "pynacl",
-                "input_file": "wheels/py3/pynacl-1.6.0-cp38-abi3-manylinux_2_26_x86_64.manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl"
-            },
-            {
-                "module": "simplejson",
-                "input_file": "wheels/py313/simplejson-3.17.2-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl"
+                "input_file": "wheels/py3/pynacl-1.6.0-cp38-abi3-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
             }
         ]
     }
