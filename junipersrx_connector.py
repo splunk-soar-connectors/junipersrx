@@ -18,7 +18,7 @@ import re
 
 import phantom.app as phantom
 import xmltodict
-from jsonpath_rw import parse as jsparse
+from jsonpath_ng import parse as jsparse
 from ncclient import manager
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector

@@ -12,7 +12,7 @@
     "product_name": "Juniper SRX",
     "product_version_regex": ".*",
     "min_phantom_version": "6.3.0",
-    "python_version": "3.9",
+    "python_version": "3.9, 3.13",
     "fips_compliant": true,
     "latest_tested_versions": [
         "Junos Version 21.2R1.10"
@@ -549,7 +549,7 @@
         "wheel": [
             {
                 "module": "bcrypt",
-                "input_file": "wheels/py39/bcrypt-4.3.0-cp39-abi3-manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py39/bcrypt-5.0.0-cp39-abi3-manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "cffi",
@@ -557,19 +557,15 @@
             },
             {
                 "module": "cryptography",
-                "input_file": "wheels/py3/cryptography-46.0.1-cp38-abi3-manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py3/cryptography-46.0.3-cp38-abi3-manylinux_2_28_x86_64.whl"
             },
             {
-                "module": "decorator",
-                "input_file": "wheels/py3/decorator-5.2.1-py3-none-any.whl"
-            },
-            {
-                "module": "jsonpath_rw",
-                "input_file": "wheels/py3/jsonpath_rw-1.4.0-py3-none-any.whl"
+                "module": "jsonpath_ng",
+                "input_file": "wheels/py3/jsonpath_ng-1.7.0-py3-none-any.whl"
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py39/lxml-6.0.1-cp39-cp39-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py39/lxml-6.0.2-cp39-cp39-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "ncclient",
@@ -620,8 +616,8 @@
                 "input_file": "wheels/py3/decorator-5.1.1-py3-none-any.whl"
             },
             {
-                "module": "jsonpath_rw",
-                "input_file": "wheels/py3/jsonpath_rw-1.4.0-py3-none-any.whl"
+                "module": "jsonpath_ng",
+                "input_file": "wheels/py3/jsonpath_ng-1.7.0-py3-none-any.whl"
             },
             {
                 "module": "lxml",
@@ -653,7 +649,7 @@
         "wheel": [
             {
                 "module": "bcrypt",
-                "input_file": "wheels/py39/bcrypt-4.3.0-cp39-abi3-manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py39/bcrypt-5.0.0-cp39-abi3-manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "cffi",
@@ -661,19 +657,15 @@
             },
             {
                 "module": "cryptography",
-                "input_file": "wheels/py3/cryptography-46.0.1-cp311-abi3-manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py3/cryptography-46.0.3-cp311-abi3-manylinux_2_28_x86_64.whl"
             },
             {
-                "module": "decorator",
-                "input_file": "wheels/py3/decorator-5.2.1-py3-none-any.whl"
-            },
-            {
-                "module": "jsonpath_rw",
-                "input_file": "wheels/py3/jsonpath_rw-1.4.0-py3-none-any.whl"
+                "module": "jsonpath_ng",
+                "input_file": "wheels/py3/jsonpath_ng-1.7.0-py3-none-any.whl"
             },
             {
                 "module": "lxml",
-                "input_file": "wheels/py313/lxml-6.0.1-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
+                "input_file": "wheels/py313/lxml-6.0.2-cp313-cp313-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl"
             },
             {
                 "module": "ncclient",
