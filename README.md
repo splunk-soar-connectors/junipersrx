@@ -1,7 +1,7 @@
 # Juniper SRX
 
 Publisher: Splunk <br>
-Connector Version: 2.0.20 <br>
+Connector Version: 2.0.21 <br>
 Product Vendor: Juniper Networks <br>
 Product Name: Juniper SRX <br>
 Minimum Product Version: 6.3.0

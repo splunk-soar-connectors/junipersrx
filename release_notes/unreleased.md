@@ -1,2 +1,1 @@
 **Unreleased**
-* Update Python version to include 3.13
