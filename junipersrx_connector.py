@@ -60,7 +60,7 @@ class JuniperConnector(BaseConnector):
                 password=password,
                 timeout=DEFAULT_TIMEOUT,
                 device_params={"name": "junos"},
-                hostkey_verify=False,
+                hostkey_verify=True,
             )
         except Exception as e:
             self.debug_print(JUNIPERSRX_ERR_DEVICE_CONNECTIVITY, e)
