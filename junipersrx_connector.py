@@ -26,6 +26,9 @@ from phantom.base_connector import BaseConnector
 from junipersrx_consts import *
 
 
+JUNOS_STATEMENT_WORD_RE = re.compile(r"^[A-Za-z0-9._/-]+$")
+
+
 class JuniperConnector(BaseConnector):
     # The actions supported by this connector
     ACTION_ID_BLOCK_APPLICATION = "block_application"
@@ -39,6 +42,17 @@ class JuniperConnector(BaseConnector):
         super().__init__()
 
         self._conn = None
+
+    @staticmethod
+    def _validate_config_words(param, action_result, *keys):
+        for key in keys:
+            value = str(param.get(key, ""))
+            if not JUNOS_STATEMENT_WORD_RE.fullmatch(value):
+                return action_result.set_status(
+                    phantom.APP_ERROR,
+                    f"Parameter '{key}' contains characters that are not allowed in a Junos configuration statement",
+                )
+        return phantom.APP_SUCCESS
 
     def _get_conn(self):
         if self._conn is not None:
@@ -220,6 +234,17 @@ class JuniperConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
+        if phantom.is_fail(
+            self._validate_config_words(
+                param,
+                action_result,
+                JUNIPERSRX_JSON_APPLICATION,
+                JUNIPERSRX_JSON_FROM_ZONE,
+                JUNIPERSRX_JSON_TO_ZONE,
+            )
+        ):
+            return action_result.get_status()
+
         block_app = param[JUNIPERSRX_JSON_APPLICATION]
 
         from_zone = param[JUNIPERSRX_JSON_FROM_ZONE]
@@ -276,6 +301,17 @@ class JuniperConnector(BaseConnector):
             return self.get_status()
 
         action_result = self.add_action_result(ActionResult(dict(param)))
+
+        if phantom.is_fail(
+            self._validate_config_words(
+                param,
+                action_result,
+                JUNIPERSRX_JSON_APPLICATION,
+                JUNIPERSRX_JSON_FROM_ZONE,
+                JUNIPERSRX_JSON_TO_ZONE,
+            )
+        ):
+            return action_result.get_status()
 
         block_app = param[JUNIPERSRX_JSON_APPLICATION]
 
@@ -374,6 +410,11 @@ class JuniperConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
+        if phantom.is_fail(
+            self._validate_config_words(param, action_result, JUNIPERSRX_JSON_FROM_ZONE, JUNIPERSRX_JSON_TO_ZONE)
+        ):
+            return action_result.get_status()
+
         block_ip = param[JUNIPERSRX_JSON_IP]
 
         from_zone = param[JUNIPERSRX_JSON_FROM_ZONE]
@@ -458,6 +499,11 @@ class JuniperConnector(BaseConnector):
             return self.get_status()
 
         action_result = self.add_action_result(ActionResult(dict(param)))
+
+        if phantom.is_fail(
+            self._validate_config_words(param, action_result, JUNIPERSRX_JSON_FROM_ZONE, JUNIPERSRX_JSON_TO_ZONE)
+        ):
+            return action_result.get_status()
 
         block_ip = param[JUNIPERSRX_JSON_IP]
 
@@ -589,10 +635,6 @@ class JuniperConnector(BaseConnector):
 
     def handle_exception(self, exception):
         return self._close_session()
-
-    def validate_parameters(self, param):
-        """This app will do it's own parameter validation"""
-        return phantom.APP_SUCCESS
 
     def handle_action(self, param):
         result = None
