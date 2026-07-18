@@ -1,6 +1,6 @@
 # File: junipersrx_connector.py
 #
-# Copyright (c) 2016-2025 Splunk Inc.
+# Copyright (c) 2016-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -131,9 +131,7 @@ class JuniperConnector(BaseConnector):
     def _get_address_set_addresses(self, param, action_result):
         addresses = []
         address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
-        get_address_set = (
-            f"show configuration security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {address_set_name} | display xml"
-        )
+        get_address_set = f"show configuration security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {address_set_name} | display xml"
 
         try:
             response = self._conn.command(command=get_address_set, format="xml")
@@ -419,9 +417,7 @@ class JuniperConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        if phantom.is_fail(
-            self._validate_config_words(param, action_result, JUNIPERSRX_JSON_FROM_ZONE, JUNIPERSRX_JSON_TO_ZONE)
-        ):
+        if phantom.is_fail(self._validate_config_words(param, action_result, JUNIPERSRX_JSON_FROM_ZONE, JUNIPERSRX_JSON_TO_ZONE)):
             return action_result.get_status()
 
         block_ip = param[JUNIPERSRX_JSON_IP]
@@ -510,9 +506,7 @@ class JuniperConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        if phantom.is_fail(
-            self._validate_config_words(param, action_result, JUNIPERSRX_JSON_FROM_ZONE, JUNIPERSRX_JSON_TO_ZONE)
-        ):
+        if phantom.is_fail(self._validate_config_words(param, action_result, JUNIPERSRX_JSON_FROM_ZONE, JUNIPERSRX_JSON_TO_ZONE)):
             return action_result.get_status()
 
         block_ip = param[JUNIPERSRX_JSON_IP]
