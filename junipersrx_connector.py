@@ -95,7 +95,8 @@ class JuniperConnector(BaseConnector):
 
     def _get_application_set_apps(self, param, action_result):
         apps = []
-        get_app_set = f"show configuration applications application-set {JUNIPERSRX_APP_SET} | display xml"
+        app_set_name = self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        get_app_set = f"show configuration applications application-set {app_set_name} | display xml"
 
         try:
             response = self._conn.command(command=get_app_set, format="xml")
@@ -129,8 +130,9 @@ class JuniperConnector(BaseConnector):
 
     def _get_address_set_addresses(self, param, action_result):
         addresses = []
+        address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
         get_address_set = (
-            f"show configuration security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {JUNIPERSRX_ADDRESS_SET} | display xml"
+            f"show configuration security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {address_set_name} | display xml"
         )
 
         try:
@@ -277,7 +279,8 @@ class JuniperConnector(BaseConnector):
         remove_policy = True if len(apps) == 1 else False
 
         # remove the app from the app-set
-        app_set_line = f"delete applications application-set {JUNIPERSRX_APP_SET} application {app_name}"
+        app_set_name = self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        app_set_line = f"delete applications application-set {app_set_name} application {app_name}"
         config_cmd.append(app_set_line)
 
         # remove the policy if needed
@@ -326,13 +329,14 @@ class JuniperConnector(BaseConnector):
         config_cmd = []
 
         # First Add the application to the application set
-        app_set = f"set applications application-set {JUNIPERSRX_APP_SET} application {block_app}"
+        app_set_name = self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        app_set = f"set applications application-set {app_set_name} application {block_app}"
         config_cmd.append(app_set)
 
         # create policy
         policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} match source-address any "
 
-        policy_line += f"destination-address any application {JUNIPERSRX_APP_SET}"
+        policy_line += f"destination-address any application {app_set_name}"
 
         config_cmd.append(policy_line)
 
@@ -366,15 +370,19 @@ class JuniperConnector(BaseConnector):
 
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully blocked application")
 
-    def _get_addr_name(self, ip):
+    @staticmethod
+    def _get_scoped_set_name(prefix, param):
+        return f"{prefix}-{param[JUNIPERSRX_JSON_FROM_ZONE]}-{param[JUNIPERSRX_JSON_TO_ZONE]}"
+
+    def _get_addr_name(self, ip, param):
         # Remove the slash in the ip if present
         rem_slash = lambda x: re.sub(r"(.*)/(.*)", r"\1-\2", x)
 
-        name = f"{rem_slash(ip)}"
+        name = f"{rem_slash(ip)}-{param[JUNIPERSRX_JSON_FROM_ZONE]}-{param[JUNIPERSRX_JSON_TO_ZONE]}"
 
         return name
 
-    def _add_address(self, block_ip, config_cmd, action_result):
+    def _add_address(self, block_ip, config_cmd, action_result, param):
         type = None
         name = None
 
@@ -382,7 +390,7 @@ class JuniperConnector(BaseConnector):
 
         description = f"Last updated by container {container_id}"
 
-        name = self._get_addr_name(block_ip)
+        name = self._get_addr_name(block_ip, param)
         value = block_ip
 
         # Try to figure out the type of ip
@@ -397,7 +405,8 @@ class JuniperConnector(BaseConnector):
         address_book_line = f'set security address-book {JUNIPERSRX_ADDRESS_BOOK} address {name} description "{description}" {type} {value}'
         config_cmd.append(address_book_line)
 
-        address_set_line = f"set security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {JUNIPERSRX_ADDRESS_SET} address {name}"
+        address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+        address_set_line = f"set security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {address_set_name} address {name}"
         config_cmd.append(address_set_line)
 
         return (phantom.APP_SUCCESS, name)
@@ -435,7 +444,7 @@ class JuniperConnector(BaseConnector):
         addr_name = None
         for address in addresses:
             # check if any of them match the one that we are trying to remove
-            if address["name"] == self._get_addr_name(block_ip):
+            if address["name"] == self._get_addr_name(block_ip, param):
                 addr_name = address["name"]
                 break
 
@@ -447,7 +456,8 @@ class JuniperConnector(BaseConnector):
         remove_policy = True if len(addresses) == 1 else False
 
         # remove the address from the address-set
-        address_set_line = f"delete security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {JUNIPERSRX_ADDRESS_SET} address {addr_name}"
+        address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+        address_set_line = f"delete security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {address_set_name} address {addr_name}"
         config_cmd.append(address_set_line)
 
         # remove the address from the address book
@@ -518,7 +528,7 @@ class JuniperConnector(BaseConnector):
         config_cmd = []
 
         # First Add the ip to the address group
-        status = self._add_address(block_ip, config_cmd, action_result)
+        status = self._add_address(block_ip, config_cmd, action_result, param)
 
         if phantom.is_fail(status):
             return action_result.get_status()
@@ -531,7 +541,8 @@ class JuniperConnector(BaseConnector):
             f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} match source-address any "
         )
 
-        policy_line += f"destination-address {JUNIPERSRX_ADDRESS_SET} application any"
+        address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+        policy_line += f"destination-address {address_set_name} application any"
 
         config_cmd.append(policy_line)
 
