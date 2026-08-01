@@ -14,6 +14,8 @@
 # and limitations under the License.
 #
 #
+import hashlib
+import json
 import re
 
 import phantom.app as phantom
@@ -283,7 +285,8 @@ class JuniperConnector(BaseConnector):
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY}"
+            policy_name = self._get_scoped_name(JUNIPERSRX_APP_POLICY, param)
+            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}"
             config_cmd.append(policy_line)
 
         self.send_progress(JUNIPERSRX_MSG_REMOVING_POLICY)
@@ -328,21 +331,22 @@ class JuniperConnector(BaseConnector):
 
         # First Add the application to the application set
         app_set_name = self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        policy_name = self._get_scoped_name(JUNIPERSRX_APP_POLICY, param)
         app_set = f"set applications application-set {app_set_name} application {block_app}"
         config_cmd.append(app_set)
 
         # create policy
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} match source-address any "
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} match source-address any "
 
         policy_line += f"destination-address any application {app_set_name}"
 
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} then reject"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject"
         config_cmd.append(policy_line)
 
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} then log session-init"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init"
 
         config_cmd.append(policy_line)
 
@@ -355,9 +359,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        insert_line = (
-            f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} before policy {permit_rule}"
-        )
+        insert_line = f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} before policy {permit_rule}"
 
         config_cmd.append(insert_line)
 
@@ -369,14 +371,24 @@ class JuniperConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully blocked application")
 
     @staticmethod
-    def _get_scoped_set_name(prefix, param):
-        return f"{prefix}-{param[JUNIPERSRX_JSON_FROM_ZONE]}-{param[JUNIPERSRX_JSON_TO_ZONE]}"
+    def _get_zone_pair_key(param):
+        zone_pair = [param[JUNIPERSRX_JSON_FROM_ZONE], param[JUNIPERSRX_JSON_TO_ZONE]]
+        encoded_pair = json.dumps(zone_pair, ensure_ascii=True, separators=(",", ":")).encode()
+        return hashlib.sha256(encoded_pair).hexdigest()[:20]
+
+    @classmethod
+    def _get_scoped_name(cls, prefix, param):
+        return f"{prefix}-{cls._get_zone_pair_key(param)}"
+
+    @classmethod
+    def _get_scoped_set_name(cls, prefix, param):
+        return cls._get_scoped_name(prefix, param)
 
     def _get_addr_name(self, ip, param):
         # Remove the slash in the ip if present
         rem_slash = lambda x: re.sub(r"(.*)/(.*)", r"\1-\2", x)
 
-        name = f"{rem_slash(ip)}-{param[JUNIPERSRX_JSON_FROM_ZONE]}-{param[JUNIPERSRX_JSON_TO_ZONE]}"
+        name = f"{rem_slash(ip)}-{self._get_zone_pair_key(param)}"
 
         return name
 
@@ -462,7 +474,8 @@ class JuniperConnector(BaseConnector):
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY}"
+            policy_name = self._get_scoped_name(JUNIPERSRX_ADDRESS_POLICY, param)
+            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}"
             config_cmd.append(policy_line)
 
         self.send_progress(JUNIPERSRX_MSG_REMOVING_POLICY)
@@ -531,9 +544,8 @@ class JuniperConnector(BaseConnector):
         # for them first else it spits an error.
 
         # create policy
-        policy_line = (
-            f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} match source-address any "
-        )
+        policy_name = self._get_scoped_name(JUNIPERSRX_ADDRESS_POLICY, param)
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} match source-address any "
 
         address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
         policy_line += f"destination-address {address_set_name} application any"
@@ -541,10 +553,10 @@ class JuniperConnector(BaseConnector):
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} then reject"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject"
         config_cmd.append(policy_line)
 
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} then log session-init"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init"
 
         config_cmd.append(policy_line)
 
@@ -557,9 +569,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        insert_line = (
-            f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} before policy {permit_rule}"
-        )
+        insert_line = f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} before policy {permit_rule}"
 
         config_cmd.append(insert_line)
 
