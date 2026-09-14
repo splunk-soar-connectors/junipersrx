@@ -14,6 +14,8 @@
 # and limitations under the License.
 #
 #
+import hashlib
+import json
 import re
 
 import phantom.app as phantom
@@ -93,9 +95,11 @@ class JuniperConnector(BaseConnector):
 
         return self.set_status_save_progress(phantom.APP_SUCCESS, JUNIPERSRX_SUCC_TEST_CONNECTIVITY_PASSED)
 
-    def _get_application_set_apps(self, param, action_result):
+    def _get_application_set_apps(self, param, action_result, legacy=False):
         apps = []
-        app_set_name = self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        app_set_name = (
+            self._get_legacy_scoped_set_name(JUNIPERSRX_APP_SET, param) if legacy else self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        )
         get_app_set = f"show configuration applications application-set {app_set_name} | display xml"
 
         try:
@@ -128,9 +132,13 @@ class JuniperConnector(BaseConnector):
 
         return (phantom.APP_SUCCESS, apps)
 
-    def _get_address_set_addresses(self, param, action_result):
+    def _get_address_set_addresses(self, param, action_result, legacy=False):
         addresses = []
-        address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+        address_set_name = (
+            self._get_legacy_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+            if legacy
+            else self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+        )
         get_address_set = f"show configuration security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {address_set_name} | display xml"
 
         try:
@@ -263,11 +271,23 @@ class JuniperConnector(BaseConnector):
             return action_result.get_status()
 
         app_name = None
+        legacy_names = False
         for app in apps:
             # check if any of them match the one that we are trying to remove
             if app["name"] == block_app:
                 app_name = app["name"]
                 break
+
+        if app_name is None:
+            status, legacy_apps = self._get_application_set_apps(param, action_result, legacy=True)
+            if phantom.is_fail(status):
+                return action_result.get_status()
+            for app in legacy_apps:
+                if app["name"] == block_app:
+                    apps = legacy_apps
+                    app_name = app["name"]
+                    legacy_names = True
+                    break
 
         if app_name is None:
             # Not an error condition
@@ -277,13 +297,16 @@ class JuniperConnector(BaseConnector):
         remove_policy = True if len(apps) == 1 else False
 
         # remove the app from the app-set
-        app_set_name = self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        app_set_name = (
+            self._get_legacy_scoped_set_name(JUNIPERSRX_APP_SET, param) if legacy_names else self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        )
         app_set_line = f"delete applications application-set {app_set_name} application {app_name}"
         config_cmd.append(app_set_line)
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY}"
+            policy_name = JUNIPERSRX_APP_POLICY if legacy_names else self._get_scoped_name(JUNIPERSRX_APP_POLICY, param)
+            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}"
             config_cmd.append(policy_line)
 
         self.send_progress(JUNIPERSRX_MSG_REMOVING_POLICY)
@@ -328,21 +351,22 @@ class JuniperConnector(BaseConnector):
 
         # First Add the application to the application set
         app_set_name = self._get_scoped_set_name(JUNIPERSRX_APP_SET, param)
+        policy_name = self._get_scoped_name(JUNIPERSRX_APP_POLICY, param)
         app_set = f"set applications application-set {app_set_name} application {block_app}"
         config_cmd.append(app_set)
 
         # create policy
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} match source-address any "
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} match source-address any "
 
         policy_line += f"destination-address any application {app_set_name}"
 
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} then reject"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject"
         config_cmd.append(policy_line)
 
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} then log session-init"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init"
 
         config_cmd.append(policy_line)
 
@@ -355,9 +379,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        insert_line = (
-            f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_APP_POLICY} before policy {permit_rule}"
-        )
+        insert_line = f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} before policy {permit_rule}"
 
         config_cmd.append(insert_line)
 
@@ -369,14 +391,33 @@ class JuniperConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, "Successfully blocked application")
 
     @staticmethod
-    def _get_scoped_set_name(prefix, param):
+    def _get_zone_pair_key(param):
+        zone_pair = [param[JUNIPERSRX_JSON_FROM_ZONE], param[JUNIPERSRX_JSON_TO_ZONE]]
+        encoded_pair = json.dumps(zone_pair, ensure_ascii=True, separators=(",", ":")).encode()
+        return hashlib.sha256(encoded_pair).hexdigest()[:20]
+
+    @classmethod
+    def _get_scoped_name(cls, prefix, param):
+        return f"{prefix}-{cls._get_zone_pair_key(param)}"
+
+    @classmethod
+    def _get_scoped_set_name(cls, prefix, param):
+        return cls._get_scoped_name(prefix, param)
+
+    @staticmethod
+    def _get_legacy_scoped_set_name(prefix, param):
         return f"{prefix}-{param[JUNIPERSRX_JSON_FROM_ZONE]}-{param[JUNIPERSRX_JSON_TO_ZONE]}"
+
+    @staticmethod
+    def _get_legacy_addr_name(ip, param):
+        name = re.sub(r"(.*)/(.*)", r"\1-\2", ip)
+        return f"{name}-{param[JUNIPERSRX_JSON_FROM_ZONE]}-{param[JUNIPERSRX_JSON_TO_ZONE]}"
 
     def _get_addr_name(self, ip, param):
         # Remove the slash in the ip if present
         rem_slash = lambda x: re.sub(r"(.*)/(.*)", r"\1-\2", x)
 
-        name = f"{rem_slash(ip)}-{param[JUNIPERSRX_JSON_FROM_ZONE]}-{param[JUNIPERSRX_JSON_TO_ZONE]}"
+        name = f"{rem_slash(ip)}-{self._get_zone_pair_key(param)}"
 
         return name
 
@@ -438,11 +479,24 @@ class JuniperConnector(BaseConnector):
             return action_result.get_status()
 
         addr_name = None
+        legacy_names = False
         for address in addresses:
             # check if any of them match the one that we are trying to remove
             if address["name"] == self._get_addr_name(block_ip, param):
                 addr_name = address["name"]
                 break
+
+        if addr_name is None:
+            status, legacy_addresses = self._get_address_set_addresses(param, action_result, legacy=True)
+            if phantom.is_fail(status):
+                return action_result.get_status()
+            legacy_addr_name = self._get_legacy_addr_name(block_ip, param)
+            for address in legacy_addresses:
+                if address["name"] == legacy_addr_name:
+                    addresses = legacy_addresses
+                    addr_name = address["name"]
+                    legacy_names = True
+                    break
 
         if addr_name is None:
             # Not an error condition
@@ -452,7 +506,11 @@ class JuniperConnector(BaseConnector):
         remove_policy = True if len(addresses) == 1 else False
 
         # remove the address from the address-set
-        address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+        address_set_name = (
+            self._get_legacy_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+            if legacy_names
+            else self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
+        )
         address_set_line = f"delete security address-book {JUNIPERSRX_ADDRESS_BOOK} address-set {address_set_name} address {addr_name}"
         config_cmd.append(address_set_line)
 
@@ -462,7 +520,8 @@ class JuniperConnector(BaseConnector):
 
         # remove the policy if needed
         if remove_policy:
-            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY}"
+            policy_name = JUNIPERSRX_ADDRESS_POLICY if legacy_names else self._get_scoped_name(JUNIPERSRX_ADDRESS_POLICY, param)
+            policy_line = f"delete security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name}"
             config_cmd.append(policy_line)
 
         self.send_progress(JUNIPERSRX_MSG_REMOVING_POLICY)
@@ -531,9 +590,8 @@ class JuniperConnector(BaseConnector):
         # for them first else it spits an error.
 
         # create policy
-        policy_line = (
-            f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} match source-address any "
-        )
+        policy_name = self._get_scoped_name(JUNIPERSRX_ADDRESS_POLICY, param)
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} match source-address any "
 
         address_set_name = self._get_scoped_set_name(JUNIPERSRX_ADDRESS_SET, param)
         policy_line += f"destination-address {address_set_name} application any"
@@ -541,10 +599,10 @@ class JuniperConnector(BaseConnector):
         config_cmd.append(policy_line)
 
         # Set the actions for the policy
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} then reject"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then reject"
         config_cmd.append(policy_line)
 
-        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} then log session-init"
+        policy_line = f"set security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} then log session-init"
 
         config_cmd.append(policy_line)
 
@@ -557,9 +615,7 @@ class JuniperConnector(BaseConnector):
         if phantom.is_fail(status):
             return action_result.get_status()
 
-        insert_line = (
-            f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {JUNIPERSRX_ADDRESS_POLICY} before policy {permit_rule}"
-        )
+        insert_line = f"insert security policies from-zone {from_zone} to-zone {to_zone} policy {policy_name} before policy {permit_rule}"
 
         config_cmd.append(insert_line)
 
